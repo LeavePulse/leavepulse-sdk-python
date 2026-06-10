@@ -284,6 +284,38 @@ class AuthOauthNs:
         """auth.oauth.start"""
         return await self._ctx.transport.request("GET", f"/auth/oauth/{provider}/start", channel="auth")
 
+class AuthOauth2Ns:
+    """auth.oauth2 procedures."""
+
+    def __init__(self, ctx: "ClientContext") -> None:
+        self._ctx = ctx
+
+    async def authorize(self, *, response_type: str | None = None, client_id: str | None = None, code_challenge: str | None = None, redirect_uri: str | None = None, scope: str | None = None, state: str | None = None, code_challenge_method: str | None = None) -> Any:
+        """auth.oauth2.authorize"""
+        return await self._ctx.transport.request("GET", "/auth/oauth/authorize", query={"response_type": response_type, "client_id": client_id, "code_challenge": code_challenge, "redirect_uri": redirect_uri, "scope": scope, "state": state, "code_challenge_method": code_challenge_method}, channel="auth")
+
+    async def token(self) -> Any:
+        """auth.oauth2.token"""
+        return await self._ctx.transport.request("POST", "/auth/oauth/token", channel="auth")
+
+class AuthTokensNs:
+    """auth.tokens procedures."""
+
+    def __init__(self, ctx: "ClientContext") -> None:
+        self._ctx = ctx
+
+    async def list(self) -> Any:
+        """auth.tokens.list"""
+        return await self._ctx.transport.request("GET", "/auth/pat-tokens", channel="auth")
+
+    async def create(self, body: dict[str, Any]) -> Any:
+        """auth.tokens.create"""
+        return await self._ctx.transport.request("POST", "/auth/pat-tokens", body=body, channel="auth")
+
+    async def revoke(self, token_id: int) -> Any:
+        """auth.tokens.revoke"""
+        return await self._ctx.transport.request("DELETE", f"/auth/pat-tokens/{token_id}", channel="auth")
+
 class AuthNs:
     """auth.* procedures."""
 
@@ -291,6 +323,8 @@ class AuthNs:
         self._ctx = ctx
         self.device = AuthDeviceNs(ctx)
         self.oauth = AuthOauthNs(ctx)
+        self.oauth2 = AuthOauth2Ns(ctx)
+        self.tokens = AuthTokensNs(ctx)
 
     async def login(self, body: dict[str, Any]) -> Any:
         """auth.login"""

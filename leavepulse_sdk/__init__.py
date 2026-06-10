@@ -16,18 +16,45 @@ from leavepulse_sdk.errors import (
     field_errors_of,
 )
 from leavepulse_sdk.transport import (
+    AuthenticatedTransport,
     BearerTransport,
     RetryOptions,
     Transport,
     TransportRequest,
 )
+from leavepulse_sdk.credentials import (
+    CredentialProvider,
+    OAuth2Credential,
+    RefreshingCredential,
+    StaticCredential,
+    TokenPair,
+)
+from leavepulse_sdk.device import (
+    DeviceFlowError,
+    DeviceFlowHandle,
+    begin_device_flow,
+    poll_device_token,
+)
+from leavepulse_sdk.oauth2 import build_authorize_url, exchange_code
 
 __all__ = [
     "LeavePulse",
+    "AuthenticatedTransport",
     "BearerTransport",
     "Transport",
     "TransportRequest",
     "RetryOptions",
+    "CredentialProvider",
+    "StaticCredential",
+    "RefreshingCredential",
+    "OAuth2Credential",
+    "TokenPair",
+    "begin_device_flow",
+    "poll_device_token",
+    "DeviceFlowHandle",
+    "DeviceFlowError",
+    "build_authorize_url",
+    "exchange_code",
     "LeavePulseError",
     "HTTPException",
     "BadRequest",
