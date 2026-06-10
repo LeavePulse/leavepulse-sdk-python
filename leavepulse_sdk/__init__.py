@@ -2,6 +2,7 @@ from leavepulse_sdk.client import LeavePulse
 from leavepulse_sdk.errors import (
     BadRequest,
     Conflict,
+    FieldError,
     Forbidden,
     HTTPException,
     LeavePulseError,
@@ -11,6 +12,8 @@ from leavepulse_sdk.errors import (
     RateLimited,
     ServerError,
     Unauthorized,
+    UnprocessableEntity,
+    field_errors_of,
 )
 from leavepulse_sdk.transport import (
     BearerTransport,
@@ -28,6 +31,7 @@ __all__ = [
     "LeavePulseError",
     "HTTPException",
     "BadRequest",
+    "UnprocessableEntity",
     "Unauthorized",
     "Forbidden",
     "NotFound",
@@ -36,4 +40,6 @@ __all__ = [
     "ServerError",
     "MalformedResponse",
     "ProblemDetails",
+    "FieldError",
+    "field_errors_of",
 ]

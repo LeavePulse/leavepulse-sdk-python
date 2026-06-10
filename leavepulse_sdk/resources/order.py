@@ -3,16 +3,21 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, List
 
+from leavepulse_sdk.resource import Resource
+
 if TYPE_CHECKING:
     from leavepulse_sdk.client import ClientContext
 
 
-class Order:
-    """Order — a scope namespace (no instance identity)."""
+class Order(Resource):
+    """Order resource."""
 
-    def __init__(self, ctx: "ClientContext") -> None:
+    def __init__(self, data: dict[str, Any], ctx: "ClientContext") -> None:
+        super().__init__(data)
         self._ctx = ctx
 
-    async def get(self, order_id: str) -> Any:
-        """order.get"""
-        return await self._ctx.transport.request("GET", f"/v1/billing/orders/{order_id}")
+    async def refresh(self) -> "Order":
+        """Re-fetch this Order and hydrate in place."""
+        data = await self._ctx.transport.request("GET", f"/v1/billing/orders/{self.id}")
+        self._ctx.hydrate("Order", data)
+        return self

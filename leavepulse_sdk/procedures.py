@@ -13,7 +13,7 @@ class AdminDiscoveryNs:
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
 
-    async def candidates(self, *, page: int | None = None, limit: int | None = None, status: str | None = None, search: str | None = None, source: str | None = None, edition: str | None = None, region: str | None = None, min_sources: str | None = None, min_mc_online: str | None = None, min_discord_members: str | None = None, sort: str | None = None) -> Any:
+    async def candidates(self, *, page: int | None = None, limit: int | None = None, status: str | None = None, search: str | None = None, source: str | None = None, edition: str | None = None, region: str | None = None, min_sources: int | None = None, min_mc_online: int | None = None, min_discord_members: int | None = None, sort: str | None = None) -> Any:
         """admin.discovery.candidates"""
         return await self._ctx.transport.request("GET", "/v1/admin/discovery/candidates", query={"page": page, "limit": limit, "status": status, "search": search, "source": source, "edition": edition, "region": region, "min_sources": min_sources, "min_mc_online": min_mc_online, "min_discord_members": min_discord_members, "sort": sort})
 
@@ -21,7 +21,7 @@ class AdminDiscoveryNs:
         """admin.discovery.edit"""
         return await self._ctx.transport.request("PATCH", f"/v1/admin/discovery/candidates/{candidate_id}", body=body)
 
-    async def approve(self, candidate_id: int, *, show_in_public: bool | None = None, server_id: str | None = None) -> Any:
+    async def approve(self, candidate_id: int, *, show_in_public: bool | None = None, server_id: int | None = None) -> Any:
         """admin.discovery.approve"""
         return await self._ctx.transport.request("POST", f"/v1/admin/discovery/candidates/{candidate_id}/actions/approve", query={"show_in_public": show_in_public, "server_id": server_id})
 
@@ -201,6 +201,18 @@ class AdminUsersNs:
         """admin.users.set_discord"""
         return await self._ctx.transport.request("PATCH", f"/v1/admin/users/{user_id}/discord", body=body)
 
+    async def create_offline_minecraft(self, user_id: int, body: dict[str, Any]) -> Any:
+        """admin.users.create_offline_minecraft"""
+        return await self._ctx.transport.request("POST", f"/v1/admin/users/{user_id}/minecraft-accounts/offline", body=body)
+
+    async def delete_minecraft(self, user_id: int, account_id: int) -> Any:
+        """admin.users.delete_minecraft"""
+        return await self._ctx.transport.request("DELETE", f"/v1/admin/users/{user_id}/minecraft-accounts/{account_id}")
+
+    async def update_minecraft(self, user_id: int, account_id: int, body: dict[str, Any]) -> Any:
+        """admin.users.update_minecraft"""
+        return await self._ctx.transport.request("PATCH", f"/v1/admin/users/{user_id}/minecraft-accounts/{account_id}", body=body)
+
     async def roles(self, user_id: int) -> Any:
         """admin.users.roles"""
         return await self._ctx.transport.request("GET", f"/v1/admin/users/{user_id}/roles")
@@ -256,6 +268,14 @@ class AuthOauthNs:
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
 
+    async def captcha_confirm(self, body: dict[str, Any]) -> Any:
+        """auth.oauth.captcha_confirm"""
+        return await self._ctx.transport.request("POST", "/auth/oauth/captcha/confirm", body=body, channel="auth")
+
+    async def totp_confirm(self, body: dict[str, Any]) -> Any:
+        """auth.oauth.totp_confirm"""
+        return await self._ctx.transport.request("POST", "/auth/oauth/totp/confirm", body=body, channel="auth")
+
     async def callback(self, provider: str, body: dict[str, Any]) -> Any:
         """auth.oauth.callback"""
         return await self._ctx.transport.request("POST", f"/auth/oauth/{provider}/callback", body=body, channel="auth")
@@ -287,6 +307,10 @@ class AuthNs:
     async def register(self, body: dict[str, Any]) -> Any:
         """auth.register"""
         return await self._ctx.transport.request("POST", "/auth/register", body=body, channel="auth")
+
+    async def session(self) -> Any:
+        """auth.session"""
+        return await self._ctx.transport.request("POST", "/auth/session", channel="auth")
 
 class BillingOrdersNs:
     """billing.orders procedures."""
@@ -355,6 +379,12 @@ class BuildsNs:
         items = data.get("items", []) if isinstance(data, dict) else []
         return self._ctx.hydrate_many("Build", items)
 
+    async def preview(self, share_token: str) -> List[Any]:
+        """builds.preview"""
+        data = await self._ctx.transport.request("GET", f"/v1/builds/preview/{share_token}")
+        items = data.get("items", []) if isinstance(data, dict) else []
+        return self._ctx.hydrate_many("Build", items)
+
     async def shared_with_me(self) -> List[Any]:
         """builds.shared_with_me"""
         data = await self._ctx.transport.request("GET", "/v1/builds/shared-with-me")
@@ -386,11 +416,33 @@ class DiscordNs:
         self._ctx = ctx
         self.link = DiscordLinkNs(ctx)
 
+class MonitoringMeNs:
+    """monitoring.me procedures."""
+
+    def __init__(self, ctx: "ClientContext") -> None:
+        self._ctx = ctx
+
+    async def stats(self) -> Any:
+        """monitoring.me.stats"""
+        return await self._ctx.transport.request("GET", "/v1/monitoring/me/stats")
+
+class MonitoringMeStatsNs:
+    """monitoring.me.stats procedures."""
+
+    def __init__(self, ctx: "ClientContext") -> None:
+        self._ctx = ctx
+
+    async def unverified(self) -> Any:
+        """monitoring.me.stats.unverified"""
+        return await self._ctx.transport.request("GET", "/v1/monitoring/me/stats/unverified")
+
 class MonitoringNs:
     """monitoring.* procedures."""
 
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
+        self.me = MonitoringMeNs(ctx)
+        self.me_stats = MonitoringMeStatsNs(ctx)
 
     async def landing(self) -> Any:
         """monitoring.landing"""
@@ -416,13 +468,21 @@ class ProjectsNs:
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
 
-    async def stats(self, *, q: str | None = None, edition: str | None = None, access: str | None = None, features: str | None = None, region: str | None = None, hosting: str | None = None, verified: str | None = None) -> Any:
+    async def stats(self, *, q: str | None = None, edition: str | None = None, access: str | None = None, features: str | None = None, region: str | None = None, hosting: str | None = None, verified: bool | None = None) -> Any:
         """projects.stats"""
         return await self._ctx.transport.request("GET", "/v1/projects/stats", query={"q": q, "edition": edition, "access": access, "features": features, "region": region, "hosting": hosting, "verified": verified})
 
     async def bridge(self, server_id: int) -> Any:
         """projects.bridge"""
         return await self._ctx.transport.request("GET", f"/v1/discord/servers/{server_id}/bridge")
+
+    async def bridge_update(self, server_id: int, body: dict[str, Any]) -> Any:
+        """projects.bridge_update"""
+        return await self._ctx.transport.request("PATCH", f"/v1/discord/servers/{server_id}/bridge", body=body)
+
+    async def bridge_import(self, server_id: int, body: dict[str, Any]) -> Any:
+        """projects.bridge_import"""
+        return await self._ctx.transport.request("POST", f"/v1/discord/servers/{server_id}/import-pull", body=body)
 
     async def bridge_roles(self, server_id: int) -> Any:
         """projects.bridge_roles"""
@@ -436,9 +496,9 @@ class ProjectsNs:
         """projects.projects_resolve"""
         return await self._ctx.transport.request("GET", f"/v1/me/projects/resolve/{project_ref}")
 
-    async def list(self, *, q: str | None = None, edition: str | None = None, access: str | None = None, features: str | None = None, region: str | None = None, hosting: str | None = None, verified: str | None = None, page: int | None = None, per_page: int | None = None, sort: str | None = None) -> Any:
+    async def list(self, *, q: str | None = None, edition: str | None = None, access: str | None = None, features: str | None = None, region: str | None = None, hosting: str | None = None, verified: bool | None = None, has_build: bool | None = None, page: int | None = None, per_page: int | None = None, sort: str | None = None) -> Any:
         """projects.list"""
-        return await self._ctx.transport.request("GET", "/v1/projects", query={"q": q, "edition": edition, "access": access, "features": features, "region": region, "hosting": hosting, "verified": verified, "page": page, "per_page": per_page, "sort": sort})
+        return await self._ctx.transport.request("GET", "/v1/projects", query={"q": q, "edition": edition, "access": access, "features": features, "region": region, "hosting": hosting, "verified": verified, "has_build": has_build, "page": page, "per_page": per_page, "sort": sort})
 
     async def create(self, body: dict[str, Any]) -> Any:
         """projects.create"""
@@ -476,7 +536,7 @@ class StatsNs:
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
 
-    async def filter(self, *, q: str | None = None, edition: str | None = None, access: str | None = None, features: str | None = None, region: str | None = None, hosting: str | None = None, verified: str | None = None, role: str | None = None) -> Any:
+    async def filter(self, *, q: str | None = None, edition: str | None = None, access: str | None = None, features: str | None = None, region: str | None = None, hosting: str | None = None, verified: bool | None = None, role: str | None = None) -> Any:
         """stats.filter"""
         return await self._ctx.transport.request("GET", "/v1/stats/filter", query={"q": q, "edition": edition, "access": access, "features": features, "region": region, "hosting": hosting, "verified": verified, "role": role})
 
@@ -508,7 +568,7 @@ class UpdatesNs:
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
 
-    async def manifest(self, *, channel: str | None = None, platform: str | None = None, server_id: str | None = None) -> Any:
+    async def manifest(self, *, channel: str | None = None, platform: str | None = None, server_id: int | None = None) -> Any:
         """updates.manifest"""
         return await self._ctx.transport.request("GET", "/v1/launcher/updates/manifest", query={"channel": channel, "platform": platform, "server_id": server_id})
 
@@ -542,11 +602,11 @@ class UsersNs:
         items = data.get("items", []) if isinstance(data, dict) else []
         return self._ctx.hydrate_many("User", items)
 
-    async def engagement(self, user_id: str) -> Any:
+    async def engagement(self, user_id: int) -> Any:
         """users.engagement"""
         return await self._ctx.transport.request("GET", f"/v1/community/users/{user_id}/engagement")
 
-    async def activity_list(self, user_id: str, *, limit: int | None = None) -> Any:
+    async def activity_list(self, user_id: int, *, limit: int | None = None) -> Any:
         """users.activity_list"""
         return await self._ctx.transport.request("GET", f"/v1/community/users/{user_id}/recent-activity", query={"limit": limit})
 
@@ -598,7 +658,7 @@ class WhitelistFormsNs:
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
 
-    async def list(self, *, project_id: str | None = None, search: str | None = None, page: int | None = None, per_page: int | None = None) -> List[Any]:
+    async def list(self, *, project_id: int | None = None, search: str | None = None, page: int | None = None, per_page: int | None = None) -> List[Any]:
         """whitelist.forms.list"""
         data = await self._ctx.transport.request("GET", "/v1/whitelist/forms", query={"project_id": project_id, "search": search, "page": page, "per_page": per_page})
         items = data.get("items", []) if isinstance(data, dict) else []

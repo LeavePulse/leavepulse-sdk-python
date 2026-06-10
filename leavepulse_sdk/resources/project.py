@@ -86,18 +86,6 @@ class Project(Resource):
         self._ctx.hydrate("Project", data)
         return self
 
-    async def bridge_update(self, body: dict[str, Any]) -> "Project":
-        """project.bridge.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/discord/servers/{self.id}/bridge", body=body)
-        self._ctx.hydrate("Project", data)
-        return self
-
-    async def bridge_import(self, body: dict[str, Any]) -> "Project":
-        """project.bridge.import"""
-        data = await self._ctx.transport.request("POST", f"/v1/discord/servers/{self.id}/import-pull", body=body)
-        self._ctx.hydrate("Project", data)
-        return self
-
     async def change_slug(self, body: dict[str, Any]) -> "Project":
         """project.change_slug"""
         data = await self._ctx.transport.request("POST", f"/v1/me/projects/{self.id}/actions/change-slug", body=body)

@@ -59,7 +59,6 @@ class LeavePulse:
             hydrate=self._hydrate,
             hydrate_many=self._hydrate_many,
         )
-        self.order = Order(self._ctx)
         self.admin = AdminNs(self._ctx)
         self.auth = AuthNs(self._ctx)
         self.billing = BillingNs(self._ctx)
@@ -89,6 +88,10 @@ class LeavePulse:
         data = await self._ctx.transport.request("GET", "/v1/me")
         return self._hydrate("Me", data)
 
+    async def order(self, id: int) -> Order:
+        data = await self._ctx.transport.request("GET", f"/v1/billing/orders/{id}")
+        return self._hydrate("Order", data)
+
     async def project(self, id: int) -> Project:
         data = await self._ctx.transport.request("GET", f"/v1/projects/{id}")
         return self._hydrate("Project", data, "project")
@@ -109,6 +112,7 @@ class LeavePulse:
             "Comment": lambda d: Comment(d, self._ctx),
             "Form": lambda d: Form(d, self._ctx),
             "Me": lambda d: Me(d, self._ctx),
+            "Order": lambda d: Order(d, self._ctx),
             "Product": lambda d: Product(d, self._ctx),
             "Project": lambda d: Project(d, self._ctx),
             "Server": lambda d: Server(d, self._ctx),
