@@ -133,6 +133,7 @@ class AuthenticatedTransport:
         client: httpx.AsyncClient | None = None,
         auth_base_url: str | None = None,
         retry: RetryOptions | None = None,
+        on_behalf_subject: str | None = None,
     ) -> None:
         self._base_url = base_url.rstrip("/")
         #: Auth-service base URL for the ``auth`` channel; defaults to the
@@ -141,6 +142,30 @@ class AuthenticatedTransport:
         self._provider = provider
         self._client = client or httpx.AsyncClient()
         self._retry = retry or RetryOptions()
+        #: When set, every request carries ``X-On-Behalf-Of: <subject>``. Only a
+        #: bot account may use this: the bot's own credential still authenticates
+        #: the call, and the platform resolves ``subject`` (``<source>:<id>``,
+        #: e.g. ``discord:123`` or ``leavepulse:42``) to the human the bot acts
+        #: for. Effective permissions are the intersection of the bot's and the
+        #: human's — on-behalf never escalates. Set via :meth:`on_behalf_of`.
+        self._on_behalf_subject = on_behalf_subject
+
+    def on_behalf_of(self, subject: str) -> "AuthenticatedTransport":
+        """Return a transport that sends every request on behalf of ``subject``.
+
+        Shares this transport's credential, client, and config. ``subject`` is
+        ``<source>:<id>`` — ``discord:<id>``, ``telegram:<id>``, or
+        ``leavepulse:<user_id>``. Intended for bot accounts; the platform ignores
+        the header for non-bot callers.
+        """
+        return AuthenticatedTransport(
+            self._base_url,
+            self._provider,
+            client=self._client,
+            auth_base_url=self._auth_base_url,
+            retry=self._retry,
+            on_behalf_subject=subject,
+        )
 
     @staticmethod
     def _build_body(
@@ -183,6 +208,8 @@ class AuthenticatedTransport:
             headers = {"Authorization": f"Bearer {token}"}
             if content_type is not None:
                 headers["Content-Type"] = content_type
+            if self._on_behalf_subject is not None:
+                headers["X-On-Behalf-Of"] = self._on_behalf_subject
             response = await self._client.request(
                 method, url, json=json_body, content=content, headers=headers
             )

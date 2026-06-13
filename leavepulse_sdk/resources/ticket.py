@@ -32,8 +32,6 @@ class Ticket(Resource):
         self._ctx.hydrate("Ticket", data)
         return self
 
-    async def reply(self, body: dict[str, Any]) -> "Ticket":
+    async def reply(self, body: dict[str, Any]) -> Any:
         """ticket.reply"""
-        data = await self._ctx.transport.request("POST", f"/v1/community/tickets/{self.id}/messages", body=body)
-        self._ctx.hydrate("Ticket", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/community/tickets/{self.id}/messages", body=body)

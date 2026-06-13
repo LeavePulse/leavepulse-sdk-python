@@ -122,203 +122,137 @@ class Server(Resource):
         """Whether the current user may import (RFC §4)."""
         return self._has_capability("server.import")
 
-    async def change_address(self, body: dict[str, Any]) -> "Server":
+    async def change_address(self, body: dict[str, Any]) -> Any:
         """server.change_address"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/change-address", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/change-address", body=body)
 
-    async def change_slug(self, body: dict[str, Any]) -> "Server":
+    async def change_slug(self, body: dict[str, Any]) -> Any:
         """server.change_slug"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/change-slug", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/change-slug", body=body)
 
-    async def force_ping(self) -> "Server":
+    async def force_ping(self) -> Any:
         """server.force_ping"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/force-ping")
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/force-ping")
 
-    async def rename(self, body: dict[str, Any]) -> "Server":
+    async def rename(self, body: dict[str, Any]) -> Any:
         """server.rename"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/rename", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/rename", body=body)
 
-    async def set_bedrock_port(self, body: dict[str, Any]) -> "Server":
+    async def set_bedrock_port(self, body: dict[str, Any]) -> Any:
         """server.set_bedrock_port"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-bedrock-port", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-bedrock-port", body=body)
 
-    async def set_description(self, body: dict[str, Any]) -> "Server":
+    async def set_description(self, body: dict[str, Any]) -> Any:
         """server.set_description"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-description", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-description", body=body)
 
-    async def set_parent(self, body: dict[str, Any]) -> "Server":
+    async def set_parent(self, body: dict[str, Any]) -> Any:
         """server.set_parent"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-parent", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-parent", body=body)
 
-    async def set_ping_port(self, body: dict[str, Any]) -> "Server":
+    async def set_ping_port(self, body: dict[str, Any]) -> Any:
         """server.set_ping_port"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-ping-port", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-ping-port", body=body)
 
-    async def set_regions(self, body: dict[str, Any]) -> "Server":
+    async def set_regions(self, body: dict[str, Any]) -> Any:
         """server.set_regions"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-regions", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-regions", body=body)
 
-    async def set_role(self, body: dict[str, Any]) -> "Server":
+    async def set_role(self, body: dict[str, Any]) -> Any:
         """server.set_role"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-role", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-role", body=body)
 
-    async def set_show_description(self, body: dict[str, Any]) -> "Server":
+    async def set_show_description(self, body: dict[str, Any]) -> Any:
         """server.set_show_description"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-show-description", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-show-description", body=body)
 
-    async def set_show_in_public(self, body: dict[str, Any]) -> "Server":
+    async def set_show_in_public(self, body: dict[str, Any]) -> Any:
         """server.set_show_in_public"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-show-in-public", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-show-in-public", body=body)
 
-    async def set_team_enabled(self, body: dict[str, Any]) -> "Server":
+    async def set_team_enabled(self, body: dict[str, Any]) -> Any:
         """server.set_team_enabled"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-team-enabled", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-team-enabled", body=body)
 
-    async def set_version_override(self, body: dict[str, Any]) -> "Server":
+    async def set_version_override(self, body: dict[str, Any]) -> Any:
         """server.set_version_override"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-version-override", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/actions/set-version-override", body=body)
 
-    async def bot_update(self, body: dict[str, Any]) -> "Server":
+    async def bot_update(self, body: dict[str, Any]) -> Any:
         """server.bot.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/bot", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/bot", body=body)
 
-    async def issue_gateway_token(self, body: dict[str, Any]) -> "Server":
+    async def issue_gateway_token(self, body: dict[str, Any]) -> Any:
         """server.issue_gateway_token"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/gateway-token", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/gateway-token", body=body)
 
-    async def icons_upload(self) -> "Server":
+    async def icons_upload(self) -> Any:
         """server.icons.upload"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/icon")
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/icon")
 
-    async def icons_select(self, body: dict[str, Any]) -> "Server":
+    async def icons_select(self, body: dict[str, Any]) -> Any:
         """server.icons.select"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/icon/select", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/icon/select", body=body)
 
-    async def voting_update(self, body: dict[str, Any]) -> "Server":
+    async def voting_update(self, body: dict[str, Any]) -> Any:
         """server.voting.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/integrations/voting", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/integrations/voting", body=body)
 
-    async def maintenance_update(self, body: dict[str, Any]) -> "Server":
+    async def maintenance_update(self, body: dict[str, Any]) -> Any:
         """server.maintenance.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/maintenance", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/maintenance", body=body)
 
-    async def motd_update(self, body: dict[str, Any]) -> "Server":
+    async def motd_update(self, body: dict[str, Any]) -> Any:
         """server.motd.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/motd", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/motd", body=body)
 
-    async def discord_unlink(self) -> "Server":
+    async def discord_unlink(self) -> Any:
         """server.discord.unlink"""
-        data = await self._ctx.transport.request("DELETE", f"/v1/servers/{self.id}/social/discord")
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("DELETE", f"/v1/servers/{self.id}/social/discord")
 
-    async def discord_update(self, body: dict[str, Any]) -> "Server":
+    async def discord_update(self, body: dict[str, Any]) -> Any:
         """server.discord.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/social/discord", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/social/discord", body=body)
 
-    async def discord_verify(self, body: dict[str, Any]) -> "Server":
+    async def discord_verify(self, body: dict[str, Any]) -> Any:
         """server.discord.verify"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/social/discord/verify", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/social/discord/verify", body=body)
 
-    async def social_update(self, body: dict[str, Any]) -> "Server":
+    async def social_update(self, body: dict[str, Any]) -> Any:
         """server.social.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/social/links", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/social/links", body=body)
 
-    async def social_verify(self, body: dict[str, Any]) -> "Server":
+    async def social_verify(self, body: dict[str, Any]) -> Any:
         """server.social.verify"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/social/verify", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/social/verify", body=body)
 
-    async def subservers_issue_link_code(self) -> "Server":
+    async def subservers_issue_link_code(self) -> Any:
         """server.subservers.issue_link_code"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/subservers/auto-link-code")
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/subservers/auto-link-code")
 
-    async def members_create(self, body: dict[str, Any]) -> "Server":
+    async def members_create(self, body: dict[str, Any]) -> Any:
         """server.members.create"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/team/members", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/team/members", body=body)
 
-    async def members_delete(self) -> "Server":
+    async def members_delete(self) -> Any:
         """server.members.delete"""
-        data = await self._ctx.transport.request("DELETE", f"/v1/servers/{self.id}/team/members/{self.id}")
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("DELETE", f"/v1/servers/{self.id}/team/members/{self.id}")
 
-    async def members_update(self, body: dict[str, Any]) -> "Server":
+    async def members_update(self, body: dict[str, Any]) -> Any:
         """server.members.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/team/members/{self.id}", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/team/members/{self.id}", body=body)
 
-    async def roles_create(self, body: dict[str, Any]) -> "Server":
+    async def roles_create(self, body: dict[str, Any]) -> Any:
         """server.roles.create"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/team/roles", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/team/roles", body=body)
 
-    async def roles_delete(self) -> "Server":
+    async def roles_delete(self) -> Any:
         """server.roles.delete"""
-        data = await self._ctx.transport.request("DELETE", f"/v1/servers/{self.id}/team/roles/{self.id}")
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("DELETE", f"/v1/servers/{self.id}/team/roles/{self.id}")
 
-    async def roles_update(self, body: dict[str, Any]) -> "Server":
+    async def roles_update(self, body: dict[str, Any]) -> Any:
         """server.roles.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/team/roles/{self.id}", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/team/roles/{self.id}", body=body)
 
     async def translations_delete(self) -> "Server":
         """server.translations.delete"""
@@ -326,32 +260,22 @@ class Server(Resource):
         self._ctx.hydrate("Server", data)
         return self
 
-    async def translations_set(self, body: dict[str, Any]) -> "Server":
+    async def translations_set(self, body: dict[str, Any]) -> Any:
         """server.translations.set"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/translations/{self.id}/{self.id}", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/translations/{self.id}/{self.id}", body=body)
 
-    async def whitelist_add_direct(self, body: dict[str, Any]) -> "Server":
+    async def whitelist_add_direct(self, body: dict[str, Any]) -> Any:
         """server.whitelist.add_direct"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/direct", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/direct", body=body)
 
-    async def whitelist_remove_direct(self) -> "Server":
+    async def whitelist_remove_direct(self) -> Any:
         """server.whitelist.remove_direct"""
-        data = await self._ctx.transport.request("DELETE", f"/v1/servers/{self.id}/whitelist/direct/{self.id}")
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("DELETE", f"/v1/servers/{self.id}/whitelist/direct/{self.id}")
 
-    async def whitelist_create_import(self, body: dict[str, Any]) -> "Server":
+    async def whitelist_create_import(self, body: dict[str, Any]) -> Any:
         """server.whitelist.create_import"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/imports", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/imports", body=body)
 
-    async def whitelist_pull_minecraft_import(self, body: dict[str, Any]) -> "Server":
+    async def whitelist_pull_minecraft_import(self, body: dict[str, Any]) -> Any:
         """server.whitelist.pull_minecraft_import"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/imports/pull-minecraft", body=body)
-        self._ctx.hydrate("Server", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/imports/pull-minecraft", body=body)

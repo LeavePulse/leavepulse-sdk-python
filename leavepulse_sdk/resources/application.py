@@ -41,32 +41,22 @@ class Application(Resource):
         """Whether the current user may resubmit (RFC §4)."""
         return self._has_capability("application.resubmit")
 
-    async def whitelist_apply(self, body: dict[str, Any]) -> "Application":
+    async def whitelist_apply(self, body: dict[str, Any]) -> Any:
         """server.whitelist.apply"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/applications", body=body)
-        self._ctx.hydrate("Application", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/applications", body=body)
 
-    async def set_status(self, body: dict[str, Any]) -> "Application":
+    async def set_status(self, body: dict[str, Any]) -> Any:
         """application.set_status"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/whitelist/applications/{self.id}", body=body)
-        self._ctx.hydrate("Application", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/whitelist/applications/{self.id}", body=body)
 
-    async def approve(self, body: dict[str, Any]) -> "Application":
+    async def approve(self, body: dict[str, Any]) -> Any:
         """application.approve"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/applications/{self.id}/approve", body=body)
-        self._ctx.hydrate("Application", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/applications/{self.id}/approve", body=body)
 
-    async def deny(self, body: dict[str, Any]) -> "Application":
+    async def deny(self, body: dict[str, Any]) -> Any:
         """application.deny"""
-        data = await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/applications/{self.id}/deny", body=body)
-        self._ctx.hydrate("Application", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/servers/{self.id}/whitelist/applications/{self.id}/deny", body=body)
 
-    async def resubmit(self, body: dict[str, Any]) -> "Application":
+    async def resubmit(self, body: dict[str, Any]) -> Any:
         """application.resubmit"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/whitelist/applications/{self.id}/resubmit", body=body)
-        self._ctx.hydrate("Application", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/servers/{self.id}/whitelist/applications/{self.id}/resubmit", body=body)

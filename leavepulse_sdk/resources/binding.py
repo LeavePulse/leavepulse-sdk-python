@@ -43,20 +43,14 @@ class Binding(Resource):
         self._ctx.hydrate("Binding", data)
         return self
 
-    async def test(self, *, audience: str | None = None) -> "Binding":
+    async def test(self, *, audience: str | None = None) -> Any:
         """binding.test"""
-        data = await self._ctx.transport.request("POST", f"/v1/whitelist/bindings/{self.id}/actions/test-notifications", query={"audience": audience})
-        self._ctx.hydrate("Binding", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/whitelist/bindings/{self.id}/actions/test-notifications", query={"audience": audience})
 
-    async def entries_add(self, body: dict[str, Any]) -> "Binding":
+    async def entries_add(self, body: dict[str, Any]) -> Any:
         """binding.entries.add"""
-        data = await self._ctx.transport.request("POST", f"/v1/whitelist/bindings/{self.id}/direct/entries", body=body)
-        self._ctx.hydrate("Binding", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/whitelist/bindings/{self.id}/direct/entries", body=body)
 
-    async def entries_remove(self) -> "Binding":
+    async def entries_remove(self) -> Any:
         """binding.entries.remove"""
-        data = await self._ctx.transport.request("DELETE", f"/v1/whitelist/bindings/{self.id}/direct/entries/{self.id}")
-        self._ctx.hydrate("Binding", data)
-        return self
+        return await self._ctx.transport.request("DELETE", f"/v1/whitelist/bindings/{self.id}/direct/entries/{self.id}")

@@ -26,17 +26,13 @@ class Comment(Resource):
         """Whether the current user may like (RFC §4)."""
         return self._has_capability("comment.like")
 
-    async def delete(self) -> "Comment":
+    async def delete(self) -> Any:
         """comment.delete"""
-        data = await self._ctx.transport.request("DELETE", f"/v1/community/projects/{self.id}/comments/{self.id}")
-        self._ctx.hydrate("Comment", data)
-        return self
+        return await self._ctx.transport.request("DELETE", f"/v1/community/projects/{self.id}/comments/{self.id}")
 
-    async def like(self) -> "Comment":
+    async def like(self) -> Any:
         """comment.like"""
-        data = await self._ctx.transport.request("POST", f"/v1/community/projects/{self.id}/comments/{self.id}/like")
-        self._ctx.hydrate("Comment", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/community/projects/{self.id}/comments/{self.id}/like")
 
     async def reply(self, body: dict[str, Any], *, target_locale: str | None = None) -> "Comment":
         """comment.reply"""

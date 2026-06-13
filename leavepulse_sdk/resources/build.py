@@ -62,11 +62,9 @@ class Build(Resource):
         """Whether the current user may share (RFC §4)."""
         return self._has_capability("build.share")
 
-    async def delete(self) -> "Build":
+    async def delete(self) -> Any:
         """build.delete"""
-        data = await self._ctx.transport.request("DELETE", f"/v1/builds/{self.id}")
-        self._ctx.hydrate("Build", data)
-        return self
+        return await self._ctx.transport.request("DELETE", f"/v1/builds/{self.id}")
 
     async def update(self, body: dict[str, Any]) -> "Build":
         """build.update"""
@@ -74,17 +72,13 @@ class Build(Resource):
         self._ctx.hydrate("Build", data)
         return self
 
-    async def collaborators_add(self, body: dict[str, Any]) -> "Build":
+    async def collaborators_add(self, body: dict[str, Any]) -> Any:
         """build.collaborators.add"""
-        data = await self._ctx.transport.request("POST", f"/v1/builds/{self.id}/collaborators", body=body)
-        self._ctx.hydrate("Build", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/builds/{self.id}/collaborators", body=body)
 
-    async def collaborators_remove(self) -> "Build":
+    async def collaborators_remove(self) -> Any:
         """build.collaborators.remove"""
-        data = await self._ctx.transport.request("DELETE", f"/v1/builds/{self.id}/collaborators/{self.id}")
-        self._ctx.hydrate("Build", data)
-        return self
+        return await self._ctx.transport.request("DELETE", f"/v1/builds/{self.id}/collaborators/{self.id}")
 
     async def config_confirm(self, body: dict[str, Any]) -> "Build":
         """build.config.confirm"""
@@ -92,20 +86,14 @@ class Build(Resource):
         self._ctx.hydrate("Build", data)
         return self
 
-    async def config_upload(self, body: dict[str, Any]) -> "Build":
+    async def config_upload(self, body: dict[str, Any]) -> Any:
         """build.config.upload"""
-        data = await self._ctx.transport.request("POST", f"/v1/builds/{self.id}/config/upload", body=body)
-        self._ctx.hydrate("Build", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/builds/{self.id}/config/upload", body=body)
 
-    async def unshare(self) -> "Build":
+    async def unshare(self) -> Any:
         """build.unshare"""
-        data = await self._ctx.transport.request("DELETE", f"/v1/builds/{self.id}/share")
-        self._ctx.hydrate("Build", data)
-        return self
+        return await self._ctx.transport.request("DELETE", f"/v1/builds/{self.id}/share")
 
-    async def share(self) -> "Build":
+    async def share(self) -> Any:
         """build.share"""
-        data = await self._ctx.transport.request("POST", f"/v1/builds/{self.id}/share")
-        self._ctx.hydrate("Build", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/builds/{self.id}/share")

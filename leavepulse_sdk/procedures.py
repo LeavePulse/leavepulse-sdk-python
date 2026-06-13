@@ -3,6 +3,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, List
 
+from leavepulse_sdk.page import Page, page_data_from
+
 if TYPE_CHECKING:
     from leavepulse_sdk.client import ClientContext
 
@@ -352,11 +354,12 @@ class BillingOrdersNs:
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
 
-    async def list(self, *, page: int | None = None, limit: int | None = None) -> List[Any]:
+    async def list(self, *, page: int | None = None, limit: int | None = None) -> Page[Any]:
         """billing.orders.list"""
-        data = await self._ctx.transport.request("GET", "/v1/billing/orders", query={"page": page, "limit": limit})
-        items = data.get("items", []) if isinstance(data, dict) else []
-        return self._ctx.hydrate_many("Order", items)
+        async def _fetch_page(_page: int, _per_page: int) -> Page[Any]:
+            data = await self._ctx.transport.request("GET", "/v1/billing/orders", query={"page": _page, "limit": _per_page})
+            return page_data_from(data, lambda items: self._ctx.hydrate_many("Order", items), _fetch_page, _page, _per_page)
+        return await _fetch_page((page if page is not None else 1), (limit if limit is not None else 20))
 
 class BillingProductsNs:
     """billing.products procedures."""
@@ -376,11 +379,12 @@ class BillingSubscriptionsNs:
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
 
-    async def list(self, *, page: int | None = None, limit: int | None = None) -> List[Any]:
+    async def list(self, *, page: int | None = None, limit: int | None = None) -> Page[Any]:
         """billing.subscriptions.list"""
-        data = await self._ctx.transport.request("GET", "/v1/billing/subscriptions", query={"page": page, "limit": limit})
-        items = data.get("items", []) if isinstance(data, dict) else []
-        return self._ctx.hydrate_many("Subscription", items)
+        async def _fetch_page(_page: int, _per_page: int) -> Page[Any]:
+            data = await self._ctx.transport.request("GET", "/v1/billing/subscriptions", query={"page": _page, "limit": _per_page})
+            return page_data_from(data, lambda items: self._ctx.hydrate_many("Subscription", items), _fetch_page, _page, _per_page)
+        return await _fetch_page((page if page is not None else 1), (limit if limit is not None else 20))
 
 class BillingNs:
     """billing.* procedures."""
@@ -590,11 +594,12 @@ class TicketsNs:
         items = data.get("items", []) if isinstance(data, dict) else []
         return self._ctx.hydrate_many("Ticket", items)
 
-    async def mine(self, *, page: int | None = None, limit: int | None = None) -> List[Any]:
+    async def mine(self, *, page: int | None = None, limit: int | None = None) -> Page[Any]:
         """tickets.mine"""
-        data = await self._ctx.transport.request("GET", "/v1/community/tickets/my", query={"page": page, "limit": limit})
-        items = data.get("items", []) if isinstance(data, dict) else []
-        return self._ctx.hydrate_many("Ticket", items)
+        async def _fetch_page(_page: int, _per_page: int) -> Page[Any]:
+            data = await self._ctx.transport.request("GET", "/v1/community/tickets/my", query={"page": _page, "limit": _per_page})
+            return page_data_from(data, lambda items: self._ctx.hydrate_many("Ticket", items), _fetch_page, _page, _per_page)
+        return await _fetch_page((page if page is not None else 1), (limit if limit is not None else 20))
 
 class UpdatesNs:
     """updates.* procedures."""
@@ -692,11 +697,12 @@ class WhitelistFormsNs:
     def __init__(self, ctx: "ClientContext") -> None:
         self._ctx = ctx
 
-    async def list(self, *, project_id: int | None = None, search: str | None = None, page: int | None = None, per_page: int | None = None) -> List[Any]:
+    async def list(self, *, project_id: int | None = None, search: str | None = None, page: int | None = None, per_page: int | None = None) -> Page[Any]:
         """whitelist.forms.list"""
-        data = await self._ctx.transport.request("GET", "/v1/whitelist/forms", query={"project_id": project_id, "search": search, "page": page, "per_page": per_page})
-        items = data.get("items", []) if isinstance(data, dict) else []
-        return self._ctx.hydrate_many("Form", items)
+        async def _fetch_page(_page: int, _per_page: int) -> Page[Any]:
+            data = await self._ctx.transport.request("GET", "/v1/whitelist/forms", query={"project_id": project_id, "search": search, "page": _page, "per_page": _per_page})
+            return page_data_from(data, lambda items: self._ctx.hydrate_many("Form", items), _fetch_page, _page, _per_page)
+        return await _fetch_page((page if page is not None else 1), (per_page if per_page is not None else 20))
 
     async def create(self, body: dict[str, Any]) -> List[Any]:
         """whitelist.forms.create"""

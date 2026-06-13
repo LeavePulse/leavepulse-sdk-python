@@ -68,23 +68,17 @@ class Project(Resource):
         await self.refresh()
         return self.servers
 
-    async def comments_create(self, body: dict[str, Any], *, target_locale: str | None = None) -> "Project":
+    async def comments_create(self, body: dict[str, Any], *, target_locale: str | None = None) -> Any:
         """project.comments.create"""
-        data = await self._ctx.transport.request("POST", f"/v1/community/projects/{self.id}/comments", body=body, query={"target_locale": target_locale})
-        self._ctx.hydrate("Project", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/community/projects/{self.id}/comments", body=body, query={"target_locale": target_locale})
 
-    async def heart(self) -> "Project":
+    async def heart(self) -> Any:
         """project.heart"""
-        data = await self._ctx.transport.request("POST", f"/v1/community/projects/{self.id}/heart")
-        self._ctx.hydrate("Project", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/community/projects/{self.id}/heart")
 
-    async def thumb(self) -> "Project":
+    async def thumb(self) -> Any:
         """project.thumb"""
-        data = await self._ctx.transport.request("POST", f"/v1/community/projects/{self.id}/thumb")
-        self._ctx.hydrate("Project", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/community/projects/{self.id}/thumb")
 
     async def change_slug(self, body: dict[str, Any]) -> "Project":
         """project.change_slug"""
@@ -110,11 +104,9 @@ class Project(Resource):
         self._ctx.hydrate("Project", data, "workspace")
         return self
 
-    async def policies_create(self, body: dict[str, Any]) -> "Project":
+    async def policies_create(self, body: dict[str, Any]) -> Any:
         """project.policies.create"""
-        data = await self._ctx.transport.request("POST", f"/v1/projects/{self.id}/whitelist/policies", body=body)
-        self._ctx.hydrate("Project", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/projects/{self.id}/whitelist/policies", body=body)
 
     async def policies_delete(self) -> "Project":
         """project.policies.delete"""
@@ -122,14 +114,10 @@ class Project(Resource):
         self._ctx.hydrate("Project", data)
         return self
 
-    async def policies_update(self, body: dict[str, Any]) -> "Project":
+    async def policies_update(self, body: dict[str, Any]) -> Any:
         """project.policies.update"""
-        data = await self._ctx.transport.request("PATCH", f"/v1/projects/{self.id}/whitelist/policies/{self.id}", body=body)
-        self._ctx.hydrate("Project", data)
-        return self
+        return await self._ctx.transport.request("PATCH", f"/v1/projects/{self.id}/whitelist/policies/{self.id}", body=body)
 
-    async def policies_test(self, *, audience: str | None = None) -> "Project":
+    async def policies_test(self, *, audience: str | None = None) -> Any:
         """project.policies.test"""
-        data = await self._ctx.transport.request("POST", f"/v1/projects/{self.id}/whitelist/policies/{self.id}/actions/test-notifications", query={"audience": audience})
-        self._ctx.hydrate("Project", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/projects/{self.id}/whitelist/policies/{self.id}/actions/test-notifications", query={"audience": audience})

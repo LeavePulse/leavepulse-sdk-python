@@ -76,32 +76,32 @@ class LeavePulse:
         self.verification = VerificationNs(self._ctx)
         self.whitelist = WhitelistNs(self._ctx)
 
-    async def build(self, id: int) -> Build:
-        data = await self._ctx.transport.request("GET", f"/v1/builds/{id}")
+    async def build(self, build_id: str) -> Build:
+        data = await self._ctx.transport.request("GET", f"/v1/builds/{build_id}")
         return self._hydrate("Build", data)
 
-    async def form(self, id: int) -> Form:
-        data = await self._ctx.transport.request("GET", f"/v1/whitelist/forms/{id}")
+    async def form(self, form_id: int) -> Form:
+        data = await self._ctx.transport.request("GET", f"/v1/whitelist/forms/{form_id}")
         return self._hydrate("Form", data)
 
-    async def me(self, id: int) -> Me:
+    async def me(self) -> Me:
         data = await self._ctx.transport.request("GET", "/v1/me")
         return self._hydrate("Me", data)
 
-    async def order(self, id: int) -> Order:
-        data = await self._ctx.transport.request("GET", f"/v1/billing/orders/{id}")
+    async def order(self, order_id: str) -> Order:
+        data = await self._ctx.transport.request("GET", f"/v1/billing/orders/{order_id}")
         return self._hydrate("Order", data)
 
-    async def project(self, id: int) -> Project:
-        data = await self._ctx.transport.request("GET", f"/v1/projects/{id}")
+    async def project(self, project_id: int) -> Project:
+        data = await self._ctx.transport.request("GET", f"/v1/projects/{project_id}")
         return self._hydrate("Project", data, "project")
 
-    async def server(self, id: int) -> Server:
-        data = await self._ctx.transport.request("GET", f"/v1/servers/{id}")
+    async def server(self, server_id: int) -> Server:
+        data = await self._ctx.transport.request("GET", f"/v1/servers/{server_id}")
         return self._hydrate("Server", data)
 
-    async def user(self, id: int) -> User:
-        data = await self._ctx.transport.request("GET", f"/v1/users/{id}/public-profile")
+    async def user(self, user_ref: str) -> User:
+        data = await self._ctx.transport.request("GET", f"/v1/users/{user_ref}/public-profile")
         return self._hydrate("User", data)
 
     def _hydrate(self, type_: str, payload: Any, data_root: str | None = None) -> Any:

@@ -27,8 +27,6 @@ class User(Resource):
         """Whether the current user may report (RFC §4)."""
         return self._has_capability("user.report")
 
-    async def report(self, body: dict[str, Any]) -> "User":
+    async def report(self, body: dict[str, Any]) -> Any:
         """user.report"""
-        data = await self._ctx.transport.request("POST", f"/v1/community/users/{self.id}/report", body=body)
-        self._ctx.hydrate("User", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/community/users/{self.id}/report", body=body)

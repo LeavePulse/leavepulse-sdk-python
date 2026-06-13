@@ -21,8 +21,6 @@ class Session(Resource):
         """Whether the current user may revoke (RFC §4)."""
         return self._has_capability("session.revoke")
 
-    async def revoke(self) -> "Session":
+    async def revoke(self) -> Any:
         """session.revoke"""
-        data = await self._ctx.transport.request("POST", f"/v1/me/sessions/{self.id}/actions/revoke")
-        self._ctx.hydrate("Session", data)
-        return self
+        return await self._ctx.transport.request("POST", f"/v1/me/sessions/{self.id}/actions/revoke")
